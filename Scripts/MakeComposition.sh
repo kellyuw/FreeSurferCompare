@@ -12,13 +12,16 @@ for hemi in lh rh; do
 	for type in PARAM2 PARAM1 difference; do
 		for metric in ctx area; do
 
+			#Make directory for storing results
+			mkdir -p ${PROJECT_DIR}/${metric}/png
+
 			#Make new annotation file with slightly modified matlab code (no display)
 			echo "Making annotation file for ${hemi}-${metric}-${type}..."
 			matlab -nodisplay -r "replace_ctab2 ${FSAVERAGE_DIR}/label/${hemi}.aparc.annot ${PROJECT_DIR}/DataFiles/${hemi}-${metric}-${type}-aparc.annot.ctab.csv ${FSAVERAGE_DIR}/label/${hemi}-${metric}-${type}.annot.new"
 
 			#Display brain in tksurfer with new annotation file
 			echo "Displaying ${hemi}-${metric}-${type} in tksurfer..."
-			tksurfer fsaverage ${hemi} pial -annotation ${FSAVERAGE_DIR}/label/${hemi}-${metric}-${type}.annot.new -tcl /project_space/child_emotion/new_memory_pipeline/bin/makeimages2.tcl
+			tksurfer fsaverage ${hemi} pial -annotation ${FSAVERAGE_DIR}/label/${hemi}-${metric}-${type}.annot.new -tcl ${PROJECT_DIR}/Scripts/makeimages2.tcl
 
 			#Rename images
 			echo "Renaming images..."
